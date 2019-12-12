@@ -1,21 +1,18 @@
-# US Congress Bills (in progress/under construction)
-Exploring bulk data on US Congress bills.
+# US Congress Bills
+Exploring bulk data on US Congress bills, compiled by ProPublica and the @UnitedStates GitHub organization. Thanks to House Appropriations!
 
-The goal: locally-hosted SQL database of cleaned/transformed data post-ETL, with a web-based front-end built in Flask. Ideally I'd *like* the plotting and visualizations to be done in D3.js...but depending on time constraints I may end up using Dash/plotly.js first.
+> “At the direction of the U.S. House of Representatives Appropriations Committee, in support of the Legislative Branch Bulk Data Task Force, the Government Publishing (GPO), the Library of Congress (LOC), the Clerk of the House, and the Secretary of the Senate are making Bill Status information in XML format available through the GPO’s Bulk Data repository starting with the 113th Congress.”
 
-ETA: I'd also like to play around with Streamlit after this, although that would be more for my own sake, getting familiar with an interesting framework.
+This project looks into the bulk bill data of the 115th US Congress, in session from January 2017 to January 2019. A large part of this project is descriptive statistics surrounding the rate of passage of bills, the sponsorship and cosponsorship records, the subjects of the bills, and the titles of the bills, among other fields.
 
-Roadmap:
-- ~~acquiring data~~
-- extracting relevant information
-  - ~~to .csv~~
-  - to SQL database
-- MVP: some visualizations of EDA and basic predictive model(s)
-  - fun in-notebook interactive graphs built with holoviews/bokeh, potentially networkx if I can make it look better
-  - can bill support (measured by sponsor/cosponsors) predict whether a bill gets passed?
-  - can the bill title and bill summary text predict whether a bill gets passed?
-- next steps: simple flask app for some fun
-  - taking in some inputs from browser (e.g., prompting the user to input a bunch of text and predicting whether a bill with that text would get passed)
-  - 11/20/19 update: rudimentary version of this done, with flask and flask-wtf for the webform, but i think i'm going to scrap this entirely in favor of carrying this out in dash
-- moving further: figuring out dash/plotly to have good visualizations of the information i extracted
-- stretch goals (wedding cake? in the cupcake-birthday cake-wedding cake example framework of agile (?) thinking): upping my visualizations game and learning D3
+Much of this exploration culminated in a Dash-based web app, soon to be hosted publicly, where you can select individual legislators take a deep dive into their work as part of the 115th Congress.
+
+The rest of this project aimed at predicting whether a bill would pass or not, using a variety of different features including:
+- sponsors (and party)
+- number of cosponsors (from each party)
+- bill's top subject
+- bill's official title
+- number of amendments
+- number of related bills
+
+The outcome of this portion of the project is displayed on the second page of the web app, where you can make up a bill and see if the final model predicts that it will pass or not.
