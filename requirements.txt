@@ -18,10 +18,6 @@ cftime==1.0.4.2
 chardet==3.0.4
 chart-studio==1.0.0
 Click==7.0
-conda==4.7.12
-conda-build==3.18.9
-conda-package-handling==1.6.0
-conda-verify==3.4.2
 contextlib2==0.6.0
 convertdate==2.2.0
 cycler==0.10.0
