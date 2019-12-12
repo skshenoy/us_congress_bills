@@ -78,61 +78,65 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.config.suppress_callback_exceptions = True
 
 app.layout = html.Div([
-    dcc.Markdown('''
-    #### Please select a legislator! [Or check out predicting stuff!](www.google.com)
-    '''),
-
-    html.Div(
-        html.P('Congress:'),
-        style={'width': '37%', 'display': 'inline-block'},
-    ),
-
-    html.Div(
-        html.P('Chamber:'),
-        style={'width': '37%', 'display': 'inline-block'},
-    ),
-
-    html.Div(
-        html.P('State:'),
-        style={'width': '20%', 'display': 'inline-block'},
-    ),
-
-    dcc.Dropdown(
-        id='congress-num-dropdown',
-        style={'height': '30px', 'width': '37%', 'display': 'inline-block'},
-        # options= [{'label': i, 'value': i} for i in df['congress_num'].unique()],
-        # CURRENTLY HARDCODING IT IN TO BE 115 BECAUSE THAT'S THE ONLY ONE I HAVE
-        # AND I CBF TO FIX THE LABELING RN
-        options= [{'label': '115th (Jan 2017 - Jan 2019)', 'value': 115}],
-        value=115
-    ),
-
-    dcc.Dropdown(
-        id='chamber-dropdown',
-        style={'height': '30px', 'width': '37%', 'display': 'inline-block'},
-        options=[{'label': i, 'value': i} for i in ['Senate', 'House of Representatives', 'Both']],
-        value='Both'
-    ),
-
-    # dcc.Dropdown(
-    #     id='state-dropdown',
-    #     style={'height': '30px', 'width': '20%', 'display': 'inline-block'},
-    #     options=[{'label': i, 'value': i} for i in congress_reps_df['state'].sort_values().unique()] + [{'label': 'All', 'value': 'All'}],
-    #     value='All'
-    # ),
-    #
-    # html.P('Legislator:'),
-    #
-    # dcc.Dropdown(
-    #     id='legislator-dropdown',
-    #     options=[{'label': i, 'value': congress_reps_df.loc[congress_reps_df['name'] == i]['bioguide_id'].values[0]} for i in congress_reps_df['name'].unique()],
-    #     value='Select...'
-    # ),
-
-    html.Div(
-        id='legislator-output'
-    )
+    dcc.Markdown('### please show me this working')
 ])
+
+# app.layout = html.Div([
+#     dcc.Markdown('''
+#     #### Please select a legislator! [Or check out predicting stuff!](www.google.com)
+#     '''),
+#
+#     html.Div(
+#         html.P('Congress:'),
+#         style={'width': '37%', 'display': 'inline-block'},
+#     ),
+#
+#     html.Div(
+#         html.P('Chamber:'),
+#         style={'width': '37%', 'display': 'inline-block'},
+#     ),
+#
+#     html.Div(
+#         html.P('State:'),
+#         style={'width': '20%', 'display': 'inline-block'},
+#     ),
+#
+#     dcc.Dropdown(
+#         id='congress-num-dropdown',
+#         style={'height': '30px', 'width': '37%', 'display': 'inline-block'},
+#         # options= [{'label': i, 'value': i} for i in df['congress_num'].unique()],
+#         # CURRENTLY HARDCODING IT IN TO BE 115 BECAUSE THAT'S THE ONLY ONE I HAVE
+#         # AND I CBF TO FIX THE LABELING RN
+#         options= [{'label': '115th (Jan 2017 - Jan 2019)', 'value': 115}],
+#         value=115
+#     ),
+#
+#     dcc.Dropdown(
+#         id='chamber-dropdown',
+#         style={'height': '30px', 'width': '37%', 'display': 'inline-block'},
+#         options=[{'label': i, 'value': i} for i in ['Senate', 'House of Representatives', 'Both']],
+#         value='Both'
+#     ),
+#
+#     # dcc.Dropdown(
+#     #     id='state-dropdown',
+#     #     style={'height': '30px', 'width': '20%', 'display': 'inline-block'},
+#     #     options=[{'label': i, 'value': i} for i in congress_reps_df['state'].sort_values().unique()] + [{'label': 'All', 'value': 'All'}],
+#     #     value='All'
+#     # ),
+#     #
+#     # html.P('Legislator:'),
+#     #
+#     # dcc.Dropdown(
+#     #     id='legislator-dropdown',
+#     #     options=[{'label': i, 'value': congress_reps_df.loc[congress_reps_df['name'] == i]['bioguide_id'].values[0]} for i in congress_reps_df['name'].unique()],
+#     #     value='Select...'
+#     # ),
+#
+#     html.Div(
+#         id='legislator-output'
+#     )
+# ])
 
 # @app.callback(
 #     Output('legislator-dropdown', 'options'),
