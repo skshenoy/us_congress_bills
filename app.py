@@ -11,6 +11,8 @@ port = int(os.environ.get('PORT', 5000))
 tabtitle='US Congress Deep Dive'
 githublink='https://github.com/skshenoy/us_congress_bills'
 
+# HOME PAGE
+
 index_layout = html.Div(children=[
     dcc.Markdown('### Hello???! You\'ve reached my project app!'),
     dcc.Markdown('#### I got the idea when I found the dataset on ProPublica\'s website. This project is divided into three parts for now.'),
@@ -34,6 +36,8 @@ index_layout = html.Div(children=[
     # dcc.Link('Click here to try passing a bill!', href='/page-3', style={"font-weight": "bold"}),
     dcc.Markdown('### Thanks for visiting!'),
     ])
+
+# PAGE TWO
 
 house_one = "H.R.2519 - The American Legion 100th Anniversary Commemorative Coin Act (385; **passed**)"
 house_two = "H.R.930 - Lymphedema Treatment Act (385; introduced)"
@@ -159,10 +163,177 @@ I’m also interested in looking at levels of bipartisanship and how they may ha
     html.Br(),
     # dcc.Link('Click here to look at legislators!', href="/page-1"),
     html.Br(),
-    # dcc.Link('Click here to try to pass a bill!', href="/page-3"),
+    dcc.Link('Click here to try to pass a bill!', href="/page-3"),
     html.Br(),
     dcc.Link('Click here to return to the home page.', href="/", style={"font-weight": "bold"}),
 ])
+
+# PAGE THREE
+
+df = pd.read_csv('./assets/data/bills_and_support.csv').dropna()
+bill_text = pd.read_csv('./assets/data/bill_title_text_for_model.csv')
+
+available_subjects = df['subjects_top_term'].unique()
+
+page_3_layout = html.Div([
+    dcc.Markdown('''#### Please make up a bill! [Or return home.](/)'''),
+    dcc.Markdown(
+"""This is where you can have some fun and see what my pre-trained model thinks of the bill you’re about to make up. For simplicity’s sake, this will look at whether your bill would pass the chamber you introduce it in, based on: the chamber; the bill’s subject; which party you’re from; how many cosponsors you have from each party; and the bill’s title.
+
+Unlike other interactive components on this app that update near-instantaneously, the output for this will take a few seconds to run and display. This is due to the fact that, although the predictive model has already been trained and here is only predicting based on your input, another model is being re-trained with every submission — under the predicted outcome, you will also be able to see other bills that supposedly have similar titles to the one you entered. You’ll also be able to see if those bills passed.
+"""),
+
+    html.Br(),
+    html.P('Select which Congress you would like to be in:'),
+    dcc.Dropdown(
+        id='congress-term',
+        options=[{'label': 115, 'value': 115}], # currently no other choice, suckers
+        value=115
+    ),
+
+    html.Br(),
+    html.P('Select the most important subject for this bill:'),
+    dcc.Dropdown(
+            id='submitted-bill-subject',
+            options=[{'label': i, 'value': i} for i in available_subjects]
+    ),
+
+    html.Br(),
+    html.P('Which chamber are you in?'),
+    dcc.RadioItems(
+        id='chamber-radio',
+        options=[
+            {'label': 'House of Representatives', 'value': 'house'},
+            {'label': 'Senate', 'value': 'senate'}
+        ],
+        value='senate',
+        labelStyle={'display': 'inline-block', 'margin-right':'2%'}
+    ),
+
+    html.Br(),
+    html.P('Which party are you in?'),
+    dcc.RadioItems(
+        id='sponsor-party-radio',
+        options=[
+            {'label': 'Democrat', 'value': 'Democrat'},
+            {'label': 'Republican', 'value': 'Republican'},
+            {'label': 'Independent', 'value': 'Independent'}
+        ],
+        labelStyle={'display': 'inline-block', 'margin-right':'2%'}
+    ),
+
+    # TODO: UPDATE ALL OF THESE TO BE SENATE DEMS, SENATE REPUBS, ETC.
+    # SAME WITH HOUSE
+    # AND MAKE SURE TO UPDATE NUMBERS BASED ON WHERE 'YOU' ARE
+    html.Br(),
+    html.P('How many Democrats are cosponsoring your bill?'),
+    html.Div(
+        dcc.Slider(
+            id='num-democrats-cosponsoring',
+            min=0,
+            max=48,
+            step=1,
+            marks={i: str(i) for i in range(1, 49, 2)},
+            value=0),
+        style={'width': '60%','display': 'inline-block'}
+    ),
+
+    html.Br(),
+    html.Br(),
+    html.P('How many Republicans are cosponsoring your bill?'),
+    html.Div(
+        dcc.Slider(
+            id='num-republicans-cosponsoring',
+            min=0,
+            max=55,
+            marks={i: str(i) for i in range(1, 56, 2)},
+            value=0),
+        style={'width': '60%','display': 'inline-block'}
+        ),
+
+    html.Br(),
+    html.Br(),
+    html.P('How many Independents are cosponsoring your bill?'),
+    html.Div(
+        dcc.Slider(
+            id='num-independents-cosponsoring',
+            min=0,
+            max=2,
+            marks={i: str(i) for i in range(1, 3)},
+            value=0),
+        style={'width': '60%','display': 'inline-block'}
+        ),
+
+    html.Br(),
+    html.Br(),
+    html.Div([
+        html.Div(
+            id='output-container-button',
+            children='Make up a title and click submit!'),
+        dcc.Input(
+            id='submitted-bill-title',
+            type='text'),
+        html.Button('Submit',
+            id='title-submit-button')
+        ]
+    ),
+
+    html.Br(),
+    html.Br(),
+
+    html.Div(
+        id='overall-output'
+    ),
+
+    html.Br(),
+    html.Br(),
+    html.Br(),
+    dcc.Link('Click here to look at legislators!', href="/page-1"),
+    html.Br(),
+    dcc.Link('Click here to look at terms of Congress!', href="/page-2"),
+    html.Br(),
+    dcc.Link('Click here to return to the home page.', href="/", style={"font-weight": "bold"}),
+])
+
+@app.callback([Output('num-republicans-cosponsoring', 'max'),
+             Output('num-republicans-cosponsoring', 'marks'),
+             Output('num-republicans-cosponsoring', 'style')],
+            [Input('chamber-radio', 'value')])
+def update_cosponsor_options(chamber):
+    if chamber == 'senate':
+        return 55, {i: str(i) for i in range(1, 56, 2)}, {'width': '60%','display': 'inline-block'}
+    else:
+        return 250, {i: str(i) for i in range(1, 251, 8)}, {'width': '92%','display': 'inline-block'}
+
+@app.callback([Output('num-democrats-cosponsoring', 'max'),
+             Output('num-democrats-cosponsoring', 'marks'),
+             Output('num-democrats-cosponsoring', 'style')],
+            [Input('chamber-radio', 'value')])
+def update_cosponsor_options(chamber):
+    if chamber == 'senate':
+        return 48, {i: str(i) for i in range(1, 49, 2)}, {'width': '60%','display': 'inline-block'}
+    else:
+        return 200, {i: str(i) for i in range(1, 201, 7)}, {'width': '85%','display': 'inline-block'}
+
+@app.callback([Output('num-independents-cosponsoring', 'max'),
+             Output('num-independents-cosponsoring', 'marks'),
+             Output('num-independents-cosponsoring', 'style')],
+            [Input('chamber-radio', 'value')])
+def update_cosponsor_options(chamber):
+    if chamber == 'senate':
+        return 2, {i: str(i) for i in range(1, 3)}, {'width': '60%','display': 'inline-block'}
+    else:
+        return 0, {0: str(0)}, {'width': '0%','display': 'inline-block'}
+
+@app.callback(Output('output-container-button', 'children'),
+    [Input('title-submit-button', 'n_clicks')])
+def update_output(n_clicks):
+    if n_clicks == None:
+        return 'Make up a title and click submit!'
+    else:
+        return 'Your bill has been submitted! Let\'s see if it passes!'
+
+
 
 ########### Set up the chart
 # no
@@ -189,8 +360,8 @@ def display_page(pathname):
         return page_2_layout
     # elif pathname == '/page-2':
     #     return page_2_layout
-    # elif pathname == '/page-3':
-    #     return page_3_layout
+    elif pathname == '/page-3':
+        return page_3_layout
     else:
         return index_layout
     # # You could also return a 404 "URL not found" page here
