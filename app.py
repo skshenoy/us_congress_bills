@@ -35,6 +35,18 @@ index_layout = html.Div(children=[
     dcc.Markdown('### Thanks for visiting!'),
     ])
 
+house_one = "H.R.2519 - The American Legion 100th Anniversary Commemorative Coin Act (385; **passed**)"
+house_two = "H.R.930 - Lymphedema Treatment Act (385; introduced)"
+house_three = "H.R.820 - Childhood Cancer STAR Act (371; introduced)"
+house_four = "H.R.299 - Blue Water Navy Vietnam Veterans Act of 2018 (330; passed House)"
+house_five = "H.R.392 - Fairness for High-Skilled Immigrants Act of 2017 (329; introduced)"
+
+senate_one = "S.2823 - Music Modernization Act (80; introduced)"
+senate_two = "A resolution objecting to United Nations Security Council Resolution 2334 and to all efforts that undermine direct negotiations between Israel and the Palestinians for a secure and peaceful settlement. (78; introduced)"
+senate_three = "Fix NICS Act of 2017 (77; introduced)"
+senate_four = "S.1182 - National Flood Insurance Program Extension Act of 2018 (76; **passed**)"
+senate_five = "S.Res.512 - A resolution designating the week of May 13 through May 19, 2018, as \"National Police Week\" (76; agreed to)"
+
 page_2_layout = html.Div([
     dcc.Markdown('#### Please enjoy looking through some of my findings! [Or return home.](/)'),
 
