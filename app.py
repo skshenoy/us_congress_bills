@@ -3,9 +3,13 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
-import os
 
+import os
 port = int(os.environ.get('PORT', 5000))
+
+import pandas as pd
+import numpy as np
+import joblib
 
 ########### Define your variables
 tabtitle='US Congress Deep Dive'
