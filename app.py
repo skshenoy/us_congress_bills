@@ -31,9 +31,7 @@ index_layout = html.Div(children=[
     dcc.Markdown("This is where I started playing around with machine learning techniques to see if I could predict whether a bill would pass. Again, there's a *lot* in this dataset so I experimented with which features to use, trying to determine if any had a significant correlation with whether a bill would pass. I used the bill’s official title (because I’m always interested in some NLP and I wanted to include that in this project), but I also worked with the breakdown of cosponsors, the sponsor’s party, the number of amendments, the number of related bills, and so on. This page is a fun little diversion where you can pretend to be a member of Congress, make up a bill, and then see what my model predicts would have happened to it."),
     # dcc.Link('Click here to try passing a bill!', href='/page-3', style={"font-weight": "bold"}),
     dcc.Markdown('### Thanks for visiting!'),
-
-    ]
-)
+    ])
 
 ########### Set up the chart
 # no
@@ -55,7 +53,7 @@ app.layout = html.Div([
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
 def display_page(pathname):
-    return index_page
+    return index_layout
     # if pathname == '/page-1':
     #     return page_1_layout
     # elif pathname == '/page-2':
