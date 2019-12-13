@@ -192,7 +192,7 @@ def display_page(pathname):
     # elif pathname == '/page-3':
     #     return page_3_layout
     else:
-        return index_page
+        return index_layout
     # # You could also return a 404 "URL not found" page here
 
 if __name__ == '__main__':
