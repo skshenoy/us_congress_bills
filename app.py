@@ -298,10 +298,7 @@ title_text_knn = joblib.load('./assets/knn_text_model.joblib')
 page_3_layout = html.Div([
     dcc.Markdown('''#### Please make up a bill! [Or return home.](/)'''),
     dcc.Markdown(
-"""This is where you can have some fun and see what my pre-trained model thinks of the bill you’re about to make up. For simplicity’s sake, this will look at whether your bill would pass the chamber you introduce it in, based on: the chamber; the bill’s subject; which party you’re from; how many cosponsors you have from each party; and the bill’s title.
-
-Unlike other interactive components on this app that update near-instantaneously, the output for this will take a few seconds to run and display. This is due to the fact that, although the predictive model has already been trained and here is only predicting based on your input, another model is being re-trained with every submission — under the predicted outcome, you will also be able to see other bills that supposedly have similar titles to the one you entered. You’ll also be able to see if those bills passed.
-"""),
+"""This is where you can have some fun and see what my pre-trained model thinks of the bill you’re about to make up. For simplicity’s sake, this will look at whether your bill would pass the chamber you introduce it in, based on: the chamber; the bill’s subject; which party you’re from; how many cosponsors you have from each party; and the bill’s title."""),
 
     html.Br(),
     html.P('Select which Congress you would like to be in:'),
