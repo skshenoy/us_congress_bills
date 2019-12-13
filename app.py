@@ -517,7 +517,7 @@ def make_deep_dive_chart(tab, leg_id):
 
         dff = spons_by_subj_df.loc[spons_by_subj_df['bioguide_id'] == leg_id]
         return html.Div([
-                dcc.Markdown(output, dedent=False),
+                dcc.Markdown(output),
                 html.Br(),
                 html.P('Choose a subject to look at more closely.'),
                 dcc.Dropdown(
