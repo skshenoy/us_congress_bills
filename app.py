@@ -500,10 +500,10 @@ def make_deep_dive_chart(tab, leg_id):
         output += f'> **{summary[1]}**\n\n'
         output += f'> **{summary[2]}**\n\n'
 
-        cospons_summary = get_cosponsorship_summary(leg_id)
-        output += f'> ** {cospons_summary[0]}**\n\n'
-        for subj in cospons_summary[1:]:
-            output += f'> {subj}' +'\n\n'
+        # cospons_summary = get_cosponsorship_summary(leg_id)
+        # output += f'> ** {cospons_summary[0]}**\n\n'
+        # for subj in cospons_summary[1:]:
+        #     output += f'> {subj}' +'\n\n'
 
         dff = spons_by_subj_df.loc[spons_by_subj_df['bioguide_id'] == leg_id]
         return html.Div([
