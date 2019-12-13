@@ -313,6 +313,8 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.title=tabtitle
 
+app.config.suppress_callback_exceptions = True
+
 ########### Set up the layout
 
 app.layout = html.Div([
