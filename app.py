@@ -10,8 +10,6 @@ port = int(os.environ.get('PORT', 5000))
 import pandas as pd
 import numpy as np
 import joblib
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.neighbors import KNeighborsClassifier
 
 ########### Define your variables
 tabtitle='US Congress Deep Dive'
@@ -389,25 +387,6 @@ def update_output(n_clicks):
      Input('num-republicans-cosponsoring', 'value')])
 def predict_and_tell(incoming_title, submitted_yet, dems, repubs):
     if submitted_yet != None:
-        the_df = pd.concat([bill_text, pd.DataFrame([{'bill_id':'input_bill', 'titles_text':incoming_title, 'enacted_as':0}])])
-
-        # vectorizer = CountVectorizer()
-        # X = vectorizer.fit_transform(the_df['titles_text'])
-        # real_X = pd.DataFrame(X.todense(), index=the_df['bill_id'])
-        #
-        # knn_mess = KNeighborsClassifier(6)
-        # knn_mess.fit(real_X, the_df['enacted_as'])
-        # my_bill = real_X.loc[real_X.index == 'input_bill']
-        # indices = knn_mess.kneighbors(my_bill, return_distance=False)[0]
-        #
-        # output = []
-        # for x in real_X.iloc[indices,:].iloc[1:].index:
-        #     curr_bill = bill_text.loc[bill_text['bill_id'] == x]
-        #     if curr_bill['enacted_as'].values[0] == 1:
-        #         output.append(f"- {x}: {curr_bill['titles_text'].values[0]} Passed.")
-        #     else:
-        #         output.append(f"- {x}: {curr_bill['titles_text'].values[0]} Did not pass.")
-
         prediction = title_text_knn.predict(incoming_title)
 
         if prediction == 1:
@@ -415,23 +394,7 @@ def predict_and_tell(incoming_title, submitted_yet, dems, repubs):
         else:
             pred = '**Unfortunately, your bill did not pass. Sorry about that.**'
 
-        return [
-            dcc.Markdown(pred),
-
-#             html.Br(),
-#
-#             dcc.Markdown(
-# f'''###### Here are some bills with similar titles to yours:
-# > **{output[0]}**
-#
-# > **{output[1]}**
-#
-# > **{output[2]}**
-#
-# > **{output[3]}**
-#
-# > **{output[4]}**'''
-)]
+        return dcc.Markdown(pred)
 
 if __name__ == '__main__':
     app.run_server()
