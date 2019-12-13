@@ -143,9 +143,9 @@ I’m also interested in looking at levels of bipartisanship and how they may ha
 
     html.Br(),
     html.Br(),
-    dcc.Link('Click here to look at legislators!', href="/page-1"),
+    # dcc.Link('Click here to look at legislators!', href="/page-1"),
     html.Br(),
-    dcc.Link('Click here to try to pass a bill!', href="/page-3"),
+    # dcc.Link('Click here to try to pass a bill!', href="/page-3"),
     html.Br(),
     dcc.Link('Click here to return to the home page.', href="/", style={"font-weight": "bold"}),
 ])
