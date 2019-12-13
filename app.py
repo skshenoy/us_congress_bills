@@ -1,26 +1,15 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
+
 ########### Define your variables
-
-
 tabtitle='US Congress Deep Dive'
 githublink='https://github.com/skshenoy/us_congress_bills'
 
-########### Set up the chart
-# no
-
-
-########### Initiate the app
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
-app.title=tabtitle
-
-########### Set up the layout
-app.layout = html.Div(children=[
+index_layout = html.Div(children=[
     dcc.Markdown('### Hello???! You\'ve reached my project app!'),
     dcc.Markdown('#### I got the idea when I found the dataset on ProPublica\'s website. This project is divided into three parts for now.'),
     html.A("For more detail into the project and my methodology, please check out my GitHub.",
@@ -45,6 +34,37 @@ app.layout = html.Div(children=[
 
     ]
 )
+
+########### Set up the chart
+# no
+
+
+########### Initiate the app
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
+app.title=tabtitle
+
+########### Set up the layout
+
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+@app.callback(dash.dependencies.Output('page-content', 'children'),
+              [dash.dependencies.Input('url', 'pathname')])
+def display_page(pathname):
+    return index_page
+    # if pathname == '/page-1':
+    #     return page_1_layout
+    # elif pathname == '/page-2':
+    #     return page_2_layout
+    # elif pathname == '/page-3':
+    #     return page_3_layout
+    # else:
+    #     return index_page
+    # # You could also return a 404 "URL not found" page here
 
 if __name__ == '__main__':
     app.run_server()
