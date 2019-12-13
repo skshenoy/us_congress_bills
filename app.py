@@ -10,6 +10,8 @@ port = int(os.environ.get('PORT', 5000))
 import pandas as pd
 import numpy as np
 import joblib
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.neighbors import KNeighborsClassifier
 
 ########### Define your variables
 tabtitle='US Congress Deep Dive'
@@ -27,7 +29,7 @@ index_layout = html.Div(children=[
     html.Br(),
     dcc.Markdown('##### Part One: Legislator Insights'),
     dcc.Markdown("This part focuses on individual legislators and the bill-related activities they performed during a given term of Congress. Currently this information focuses mostly on their sponsorship and cosponsorship records. Next steps include pulling in voting records as well (probably using ProPublica’s Congress API). On top of that, I’m deciding how to incorporate and display other information, such as the leadership roles that a legislator may have held and any committees that they may have been appointed to."),
-    # dcc.Link('Click here to look at legislators!', href="/page-1", style={"font-weight": "bold"}),
+    dcc.Link('Click here to look at legislators!', href="/page-1", style={"font-weight": "bold"}),
     html.Br(),
     html.Br(),
     dcc.Markdown('##### Part Two: Congressional Insights'),
@@ -37,7 +39,7 @@ index_layout = html.Div(children=[
     html.Br(),
     dcc.Markdown('##### Part Three: Fun with Models'),
     dcc.Markdown("This is where I started playing around with machine learning techniques to see if I could predict whether a bill would pass. Again, there's a *lot* in this dataset so I experimented with which features to use, trying to determine if any had a significant correlation with whether a bill would pass. I used the bill’s official title (because I’m always interested in some NLP and I wanted to include that in this project), but I also worked with the breakdown of cosponsors, the sponsor’s party, the number of amendments, the number of related bills, and so on. This page is a fun little diversion where you can pretend to be a member of Congress, make up a bill, and then see what my model predicts would have happened to it."),
-    # dcc.Link('Click here to try passing a bill!', href='/page-3', style={"font-weight": "bold"}),
+    dcc.Link('Click here to try passing a bill!', href='/page-3', style={"font-weight": "bold"}),
     dcc.Markdown('### Thanks for visiting!'),
     ])
 
@@ -152,7 +154,6 @@ TX-35 | Lloyd Doggett (D)  | 18 | 0.0
     ),
     html.Br(),
 
-    # dcc.Markdown('# THIS IS WHERE GRAPHS GO AAAAAAAA'),
     dcc.Markdown('###### Graphs of overall bill passage will be updated here soon.'),
     html.Br(),
 
@@ -165,7 +166,7 @@ I’m also interested in looking at levels of bipartisanship and how they may ha
 
     html.Br(),
     html.Br(),
-    # dcc.Link('Click here to look at legislators!', href="/page-1"),
+    dcc.Link('Click here to look at legislators!', href="/page-1"),
     html.Br(),
     dcc.Link('Click here to try to pass a bill!', href="/page-3"),
     html.Br(),
@@ -175,9 +176,10 @@ I’m also interested in looking at levels of bipartisanship and how they may ha
 # PAGE THREE
 
 df = pd.read_csv('./assets/data/bills_and_support.csv').dropna()
-bill_text = pd.read_csv('./assets/data/bill_title_text_for_model.csv')
-
 available_subjects = df['subjects_top_term'].unique()
+
+bill_text = pd.read_csv('./assets/data/bill_title_text_for_model.csv')
+title_text_knn = joblib.load('./assets/knn_text_model.joblib')
 
 page_3_layout = html.Div([
     dcc.Markdown('''#### Please make up a bill! [Or return home.](/)'''),
@@ -226,9 +228,6 @@ Unlike other interactive components on this app that update near-instantaneously
         labelStyle={'display': 'inline-block', 'margin-right':'2%'}
     ),
 
-    # TODO: UPDATE ALL OF THESE TO BE SENATE DEMS, SENATE REPUBS, ETC.
-    # SAME WITH HOUSE
-    # AND MAKE SURE TO UPDATE NUMBERS BASED ON WHERE 'YOU' ARE
     html.Br(),
     html.P('How many Democrats are cosponsoring your bill?'),
     html.Div(
@@ -341,7 +340,9 @@ def display_page(pathname):
     # # You could also return a 404 "URL not found" page here
 
 
-# page 2
+# page 2 has no callbacks right now
+
+# page 3
 
 @app.callback([Output('num-republicans-cosponsoring', 'max'),
              Output('num-republicans-cosponsoring', 'marks'),
@@ -380,6 +381,57 @@ def update_output(n_clicks):
         return 'Make up a title and click submit!'
     else:
         return 'Your bill has been submitted! Let\'s see if it passes!'
+
+@app.callback(Output('overall-output', 'children'),
+    [Input('submitted-bill-title', 'value'),
+     Input('title-submit-button', 'n_clicks'),
+     Input('num-democrats-cosponsoring', 'value'),
+     Input('num-republicans-cosponsoring', 'value')])
+def predict_and_tell(incoming_title, submitted_yet, dems, repubs):
+    if submitted_yet != None:
+        the_df = pd.concat([bill_text, pd.DataFrame([{'bill_id':'input_bill', 'titles_text':incoming_title, 'enacted_as':0}])])
+
+        vectorizer = CountVectorizer()
+        X = vectorizer.fit_transform(the_df['titles_text'])
+        real_X = pd.DataFrame(X.todense(), index=the_df['bill_id'])
+
+        knn_mess = KNeighborsClassifier(6)
+        knn_mess.fit(real_X, the_df['enacted_as'])
+        my_bill = real_X.loc[real_X.index == 'input_bill']
+        indices = knn_mess.kneighbors(my_bill, return_distance=False)[0]
+
+        output = []
+        for x in real_X.iloc[indices,:].iloc[1:].index:
+            curr_bill = bill_text.loc[bill_text['bill_id'] == x]
+            if curr_bill['enacted_as'].values[0] == 1:
+                output.append(f"- {x}: {curr_bill['titles_text'].values[0]} Passed.")
+            else:
+                output.append(f"- {x}: {curr_bill['titles_text'].values[0]} Did not pass.")
+
+        prediction = title_text_knn.predict(incoming_title)
+
+        if prediction == 1:
+            pred = '**Congratulations, your bill passed!**'
+        else:
+            pred = '**Unfortunately, your bill did not pass. Sorry about that.**'
+
+        return [
+            dcc.Markdown(pred),
+
+            html.Br(),
+
+            dcc.Markdown(
+f'''###### Here are some bills with similar titles to yours:
+> **{output[0]}**
+
+> **{output[1]}**
+
+> **{output[2]}**
+
+> **{output[3]}**
+
+> **{output[4]}**
+''')]
 
 if __name__ == '__main__':
     app.run_server()
