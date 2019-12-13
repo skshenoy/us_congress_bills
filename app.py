@@ -10,6 +10,7 @@ port = int(os.environ.get('PORT', 5000))
 import pandas as pd
 import numpy as np
 import joblib
+import sklearn
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.neighbors import KNeighborsClassifier
 
