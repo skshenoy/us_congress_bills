@@ -14,8 +14,7 @@ tabtitle='fml!'
 myheading='DOES THIS ACTUALLY UPDATE'
 label1='IBU'
 label2='ABV'
-githublink='https://github.com/austinlasseter/flying-dog-beers'
-sourceurl='https://www.flyingdog.com/beers/'
+githublink='https://github.com/skshenoy/us_congress_bills'
 
 ########### Set up the chart
 bitterness = go.Bar(
@@ -48,14 +47,15 @@ app.title=tabtitle
 
 ########### Set up the layout
 app.layout = html.Div(children=[
-    html.H1(myheading),
     dcc.Markdown('### Hello! You\'ve reached my project app!'),
     dcc.Markdown('#### I got the idea when I found the dataset on ProPublica\'s website. This project is divided into three parts for now.'),
-    dcc.Graph(
-        id='flyingdog',
-        figure=beer_fig
-    ),
-    html.A('Code on Github', href=githublink),
+    html.A("For more detail into the project and my methodology, please check out my GitHub.",
+        href=githublink,
+        target="_blank",
+        style={"size":20, "font-weight": "bold"}),
+    html.Br(),
+    dcc.Markdown('##### Part One: Legislator Insights'),
+    dcc.Markdown("This part focuses on individual legislators and the bill-related activities they performed during a given term of Congress. Currently this information focuses mostly on their sponsorship and cosponsorship records. Next steps include pulling in voting records as well (probably using ProPublica’s Congress API). On top of that, I’m deciding how to incorporate and display other information, such as the leadership roles that a legislator may have held and any committees that they may have been appointed to."),
     html.Br(),
     html.A('Data Source', href=sourceurl),
     ]
