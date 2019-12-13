@@ -49,6 +49,8 @@ app.title=tabtitle
 ########### Set up the layout
 app.layout = html.Div(children=[
     html.H1(myheading),
+    dcc.Markdown('### Hello! You\'ve reached my project app!'),
+    dcc.Markdown('#### I got the idea when I found the dataset on ProPublica\'s website. This project is divided into three parts for now.'),
     dcc.Graph(
         id='flyingdog',
         figure=beer_fig
