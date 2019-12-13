@@ -166,21 +166,21 @@ app.title=tabtitle
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
+    html.Div(id='page-content', children='ha')
 ])
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
 def display_page(pathname):
-    # return index_layout
-    if pathname == '/page-2':
-        return page_2_layout
+    return index_layout
+    # if pathname == '/page-2':
+    #     return page_2_layout
     # elif pathname == '/page-2':
     #     return page_2_layout
     # elif pathname == '/page-3':
     #     return page_3_layout
-    else:
-        return index_page
+    # else:
+    #     return index_page
     # # You could also return a 404 "URL not found" page here
 
 if __name__ == '__main__':
