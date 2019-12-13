@@ -178,7 +178,7 @@ app.title=tabtitle
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content', children='ha')
+    html.Div(id='page-content')
 ])
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),
