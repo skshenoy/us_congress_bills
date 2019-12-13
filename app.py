@@ -49,8 +49,6 @@ overall_sponsorship_df = pd.read_csv('./assets/data/overall_sponsorship_aggs.csv
 spons_by_subj_df = pd.read_csv('./assets/data/sponsorship_by_subj_agg.csv')
 cosponsorship_info = pd.read_csv('./assets/data/cosponsorship_summary_info.csv')
 bill_summary_info = pd.read_csv('./assets/data/bills_and_passage_subject_and_type.csv')
-leg_knn_info = pd.read_csv('./assets/data/leg_knn_info.csv').set_index('cosponsors')
-leg_knn = joblib.load('./assets/similar_legs_knn.joblib')
 
 def get_summary(bioguide_id):
     leg_vals = overall_sponsorship_df.loc[overall_sponsorship_df['bioguide_id'] == bioguide_id].values[0]
@@ -455,11 +453,10 @@ app.layout = html.Div([
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
 def display_page(pathname):
-    # return index_layout
-    if pathname == '/page-2':
+    if pathname == '/page-1':
+        return page_1_layout
+    elif pathname == '/page-2':
         return page_2_layout
-    # elif pathname == '/page-2':
-    #     return page_2_layout
     elif pathname == '/page-3':
         return page_3_layout
     else:
@@ -596,11 +593,12 @@ def render_tab_one(tab):
     [Input('legislator-dropdown', 'value'),
      Input('legislators-knn-radio', 'value')])
 def set_display_neighbors(leg_id, knn_num):
-    similar_legs = get_similar_legs(leg_id, knn_num)
-    output = '###### Legislators with similar records:\n'
-    for leg in similar_legs:
-        output += f'> ** {leg[0]}**' +'\n\n'
-    return dcc.Markdown(output)
+    # similar_legs = get_similar_legs(leg_id, knn_num)
+    # output = '###### Legislators with similar records:\n'
+    # for leg in similar_legs:
+    #     output += f'> ** {leg[0]}**' +'\n\n'
+    # return dcc.Markdown(output)
+    return dcc.Markdown("**Currently refactoring due to filesize limitations.**")
 
 # page 2 has no callbacks right now
 
