@@ -56,8 +56,6 @@ app.layout = html.Div(children=[
     html.Br(),
     dcc.Markdown('##### Part One: Legislator Insights'),
     dcc.Markdown("This part focuses on individual legislators and the bill-related activities they performed during a given term of Congress. Currently this information focuses mostly on their sponsorship and cosponsorship records. Next steps include pulling in voting records as well (probably using ProPublica’s Congress API). On top of that, I’m deciding how to incorporate and display other information, such as the leadership roles that a legislator may have held and any committees that they may have been appointed to."),
-    html.Br(),
-    html.A('Data Source', href=sourceurl),
     ]
 )
 
