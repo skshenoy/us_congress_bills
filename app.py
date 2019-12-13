@@ -10,10 +10,8 @@ abv_values=[5.4, 7.1, 9.2, 4.3]
 color1='lightblue'
 color2='darkgreen'
 mytitle='Beer Comparison'
-tabtitle='fml!'
-myheading='DOES THIS ACTUALLY UPDATE'
-label1='IBU'
-label2='ABV'
+
+tabtitle='US Congress Deep Dive'
 githublink='https://github.com/skshenoy/us_congress_bills'
 
 ########### Set up the chart
@@ -47,7 +45,7 @@ app.title=tabtitle
 
 ########### Set up the layout
 app.layout = html.Div(children=[
-    dcc.Markdown('### Hello! You\'ve reached my project app!'),
+    dcc.Markdown('### Hello???! You\'ve reached my project app!'),
     dcc.Markdown('#### I got the idea when I found the dataset on ProPublica\'s website. This project is divided into three parts for now.'),
     html.A("For more detail into the project and my methodology, please check out my GitHub.",
         href=githublink,
