@@ -81,22 +81,21 @@ def get_cosponsorship_summary(leg_id):
     leg_cospons = fix_string_list(leg['bills'].values[0])
     leg_bills = bill_summary_info.loc[bill_summary_info['bill_id'].isin(leg_cospons)]
     cospon_summary.append(f"    - cosponsored {leg['num_bills_cosponsored'].values[0]} bills with an overall rate of passage of {np.round(leg_bills['enacted_as'].mean(), 3)}")
-    leg_agg = leg_bills.groupby('subjects_top_term').agg(
-        num_bills=('bill_id', 'size'), pass_rate=('enacted_as', 'mean')).reset_index()
+    leg_agg = leg_bills.groupby('subjects_top_term').agg(num_bills=('bill_id', 'size'), pass_rate=('enacted_as', 'mean')).reset_index()
     for subj in leg_agg.values:
         line = f'        - {subj[1]} {subj[0]} bills with a rate of passage of {subj[2]}'
         cospon_summary.append(line)
     return cospon_summary
 
-def get_similar_legs(leg_id, n):
-    one_leg = leg_knn_info.loc[leg_knn_info.index == leg_id]
-    indices = leg_knn.kneighbors(one_leg, return_distance=False)[0]
-    neighbors = leg_knn_info.iloc[indices,:].iloc[1:].index.values
-    summaries = []
-    for n in neighbors[:n]:
-        n_sum = get_summary(n)
-        summaries.append(n_sum)
-    return summaries
+# def get_similar_legs(leg_id, n):
+#     one_leg = leg_knn_info.loc[leg_knn_info.index == leg_id]
+#     indices = leg_knn.kneighbors(one_leg, return_distance=False)[0]
+#     neighbors = leg_knn_info.iloc[indices,:].iloc[1:].index.values
+#     summaries = []
+#     for n in neighbors[:n]:
+#         n_sum = get_summary(n)
+#         summaries.append(n_sum)
+#     return summaries
 
 page_1_layout = html.Div([
     dcc.Markdown('#### Please select a legislator! [Or return home.](/)'),
