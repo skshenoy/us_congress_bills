@@ -9,6 +9,7 @@ port = int(os.environ.get('PORT', 5000))
 
 import pandas as pd
 import numpy as np
+import sklearn
 import joblib
 
 ########### Define your variables
