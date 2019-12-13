@@ -299,6 +299,48 @@ Unlike other interactive components on this app that update near-instantaneously
     dcc.Link('Click here to return to the home page.', href="/", style={"font-weight": "bold"}),
 ])
 
+
+
+
+
+########### Set up the chart
+# no
+
+
+########### Initiate the app
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
+app.title=tabtitle
+
+########### Set up the layout
+
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+############# ALL CALLBACKS UNDER HERE I GUESS
+
+# navigating around
+
+@app.callback(dash.dependencies.Output('page-content', 'children'),
+              [dash.dependencies.Input('url', 'pathname')])
+def display_page(pathname):
+    # return index_layout
+    if pathname == '/page-2':
+        return page_2_layout
+    # elif pathname == '/page-2':
+    #     return page_2_layout
+    elif pathname == '/page-3':
+        return page_3_layout
+    else:
+        return index_layout
+    # # You could also return a 404 "URL not found" page here
+
+
+# page 2
+
 @app.callback([Output('num-republicans-cosponsoring', 'max'),
              Output('num-republicans-cosponsoring', 'marks'),
              Output('num-republicans-cosponsoring', 'style')],
@@ -336,39 +378,6 @@ def update_output(n_clicks):
         return 'Make up a title and click submit!'
     else:
         return 'Your bill has been submitted! Let\'s see if it passes!'
-
-
-
-########### Set up the chart
-# no
-
-
-########### Initiate the app
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
-app.title=tabtitle
-
-########### Set up the layout
-
-app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
-])
-
-@app.callback(dash.dependencies.Output('page-content', 'children'),
-              [dash.dependencies.Input('url', 'pathname')])
-def display_page(pathname):
-    # return index_layout
-    if pathname == '/page-2':
-        return page_2_layout
-    # elif pathname == '/page-2':
-    #     return page_2_layout
-    elif pathname == '/page-3':
-        return page_3_layout
-    else:
-        return index_layout
-    # # You could also return a 404 "URL not found" page here
 
 if __name__ == '__main__':
     app.run_server()
