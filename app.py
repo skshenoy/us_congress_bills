@@ -19,8 +19,8 @@ githublink='https://github.com/skshenoy/us_congress_bills'
 # HOME PAGE
 
 index_layout = html.Div(children=[
-    dcc.Markdown('### Hello???! You\'ve reached my project app!'),
-    dcc.Markdown('#### I got the idea when I found the dataset on ProPublica\'s website. This project is divided into three parts for now.'),
+    dcc.Markdown('#### Hello, you\'ve reached my project app!'),
+    dcc.Markdown('##### I got the idea for this side project after findding the dataset on ProPublica\'s website. This project is divided into three parts for now. The goal of this project is for more practice with data manipulation and presentation, as opposed to a more rigorous analysis of Congressional activity itself. The analysis here is somewhat basic and oversimplifies the legislative process.'),
     html.A("For more detail into the project and my methodology, please check out my GitHub.",
         href=githublink,
         target="_blank",
@@ -39,7 +39,7 @@ index_layout = html.Div(children=[
     dcc.Markdown('##### Part Three: Fun with Models'),
     dcc.Markdown("This is where I started playing around with machine learning techniques to see if I could predict whether a bill would pass. Again, there's a *lot* in this dataset so I experimented with which features to use, trying to determine if any had a significant correlation with whether a bill would pass. I used the bill’s official title (because I’m always interested in some NLP and I wanted to include that in this project), but I also worked with the breakdown of cosponsors, the sponsor’s party, the number of amendments, the number of related bills, and so on. This page is a fun little diversion where you can pretend to be a member of Congress, make up a bill, and then see what my model predicts would have happened to it."),
     dcc.Link('Click here to try passing a bill!', href='/page-3', style={"font-weight": "bold"}),
-    dcc.Markdown('### Thanks for visiting!'),
+    dcc.Markdown('#### Thanks for checking this out!'),
     ])
 
 # PAGE ONE
